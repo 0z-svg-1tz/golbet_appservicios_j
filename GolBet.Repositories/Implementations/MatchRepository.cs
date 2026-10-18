@@ -10,7 +10,7 @@ namespace GolBet.Repositories.Implementations;
 public class MatchRepository : GenericRepository<Match>, IMatchRepository
 {
     public MatchRepository(AppDbContext context) : base(context) { }
-    public async Task<IEnumerable<Match>> GetAllWithTeamsAsync(MatchStatus? status = null)
+    public async Task<IEnumerable<Match>> GetAllWithTeamsAsync(MatchStatus? status = null, string? search = null) //
     {
         var query = _dbSet
             .Include(m => m.HomeTeam)
@@ -21,6 +21,7 @@ public class MatchRepository : GenericRepository<Match>, IMatchRepository
 
         if (status.HasValue)
             query = query.Where(m => m.Status == status.Value);
+        query = ApplyTeamSearch(query, search);//
 
         return await query.OrderBy(m => m.Date).ToListAsync();
     }
@@ -31,4 +32,14 @@ public class MatchRepository : GenericRepository<Match>, IMatchRepository
             .Include(m => m.Bets)
             .AsNoTracking()
             .FirstOrDefaultAsync(m => m.Id == id);
+
+    private static IQueryable<Match> ApplyTeamSearch(IQueryable<Match> query, string? search)//
+    {
+        if (string.IsNullOrWhiteSpace(search)) return query;
+
+        var term = search.Trim().ToLower();
+        return query.Where(m => m.HomeTeam.Name.Contains(term)
+                             || m.AwayTeam.Name.Contains(term));
+    }
+
 }
