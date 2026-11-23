@@ -1,6 +1,5 @@
-﻿﻿
-<!DOCTYPE html>
-<html lang="en">
+﻿﻿<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,7 +16,8 @@
                     ⚽ GolBet
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarMain">
+                        data-bs-target="#navbarMain" aria-controls="navbarMain"
+                        aria-expanded="false" aria-label="Alternar navegación">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarMain">
@@ -25,11 +25,9 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Home" asp-action="Index">Inicio</a>
                         </li>
-
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Matches" asp-action="Index">Partidos</a>
                         </li>
-                        <!-- _Layout.cshtml, dentro del ul del navbar -->
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
@@ -42,8 +40,6 @@
                                 <a class="nav-link" asp-controller="Bets" asp-action="MyBets">Mis apuestas</a>
                             </li>
                         }
-
-
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
@@ -53,12 +49,12 @@
     <div class="container">
         <main role="main" class="pb-3">
             @if (TempData["Success"] is string message)
-{
-    <div class="alert alert-success alert-dismissible fade show">
-        ✅ @message
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-}
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    ✅ @message
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                </div>
+            }
             @if (TempData["Error"] is string errorMessage)
             {
                 <div class="alert alert-danger alert-dismissible fade show">
@@ -66,17 +62,15 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             }
-
             @RenderBody()
         </main>
     </div>
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; @DateTime.Now.Year - GolBet · Simulador académico PARA TODOS!!!!
+            &copy; @DateTime.Now.Year - GolBet · Simulador académico
         </div>
     </footer>
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
